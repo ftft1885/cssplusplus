@@ -1,0 +1,17 @@
+#header {
+  color: #222;
+  button {
+    background: #ccc;
+  }
+  :hover {
+    color: red;
+  }
+  background: #333;
+}
+
+#footer {
+  font-size: 2em;
+  span {
+    color: #999;
+  }
+}

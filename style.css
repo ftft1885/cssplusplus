@@ -1,0 +1,21 @@
+var mycolor = #222;
+var myborder = 5px;
+@test = #111;
+
+#header {
+  color: mycolor+#333;
+  border: myborder solid red;
+  button: {
+    background: #ccc;
+  }
+}
+
+#header:hover {
+  color: red;
+}
+
+/*
+   this is 
+   block comment
+*/
+

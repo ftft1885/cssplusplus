@@ -1,0 +1,18 @@
+#header {
+  color:  #222;
+  width: 20px;
+  border: 2px;
+  button {
+    color: red;
+  }
+  background-image: none;
+  div {
+    height: 30px;
+  }
+  transition: 3ms;
+}
+
+#footer {
+  color: #333;
+  font-size: 2em;
+}
