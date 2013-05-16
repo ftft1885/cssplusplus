@@ -12,7 +12,7 @@ module.exports = function(str) {
         json: cssHash
       });
   });
-  //console.log(cssHash);
+  console.log(cssHash);
   for (var key in cssHash) {
     print(key, cssHash[key]);
   }
@@ -25,9 +25,20 @@ module.exports = function(str) {
     var s = selector + ' {\n';
     for (var key in hash) {
         if (typeof hash[key] === 'string') {
+
           s += '  ' + key + ': ' + hash[key] + ';\n';
+
         } else {
-          print(selector+' '+key, hash[key]);
+
+          // key is a selector to
+          
+          if (key.match(/^&:\w+/)) {
+            // like &:hover
+            var _key = key.slice(1);
+            print(selector + _key, hash[key]); 
+          } else {
+            print(selector + ' ' + key, hash[key]);
+          }
         }
     }
     s += '}\n';

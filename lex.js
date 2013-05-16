@@ -99,6 +99,8 @@ module.exports = function(str) {
      var reg = [];
      reg[0] = /^[@|\#|\.|:|-]*[\w|-]+/;
      reg[1] = /^["']\S+["']/;
+     // like &:hover
+     reg[2] = /^&:\w+/;
      var _try = [];
      for (var i = 0; i < reg.length; i++) {
        var m = str.match(reg[i]);
