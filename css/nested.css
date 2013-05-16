@@ -1,5 +1,6 @@
 #header {
   color: #222;
+  font: bold 20px "雅黑";
   button {
     background: #ccc;
   }
@@ -11,6 +12,7 @@
 
 #footer {
   font-size: 2em;
+  width: @test;
   span {
     color: #999;
   }

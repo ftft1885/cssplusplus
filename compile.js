@@ -50,7 +50,10 @@ function arr2json(p) {
       for (var i = 0; i < p.arr.length; i++) {
          last += '}';
       }
-      str = '{"' + p.arr.join('":{"') + '":' + '"1"' + last;
+      var val = p.val || 1;
+      // replace `"`
+      val = val.replace(/"/g, '\\"');
+      str = '{"' + p.arr.join('":{"') + '":' + '"'+val+'"' + last;
       p.json[tmp] = JSON.parse(str);
     }
   }

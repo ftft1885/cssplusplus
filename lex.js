@@ -96,13 +96,23 @@ module.exports = function(str) {
    function string() {
      
      // return string
-     var reg = /^[@|\#|\.|:|-]*[\w|-]+/;
+     var reg = [];
+     reg[0] = /^[@|\#|\.|:|-]*[\w|-]+/;
+     reg[1] = /^["']\S+["']/;
+     var _try = [];
+     for (var i = 0; i < reg.length; i++) {
+       var m = str.match(reg[i]);
+       if (m !== null) {
+         str = str.slice(m[0].length);
+         return ['string', m[0]];
+       }
+     }
+     return null;
+     /*
      var m = str.match(reg);
      if (m === null) {
        return m;
      }
-     str = str.slice(m[0].length);
-     return ['string', m[0]];
-     //return ['string', testStr];
+     */
    }
 }

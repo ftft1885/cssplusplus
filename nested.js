@@ -5,7 +5,7 @@ var fs = require('fs');
 //var parser = require('./parser.js');
 var compile = require('./compile.js');
 
-var str = fs.readFileSync('./nested.css')+'';
+var str = fs.readFileSync('./css/nested.css')+'';
 
 var stmt = compile(str);
 

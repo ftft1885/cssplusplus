@@ -4,7 +4,7 @@ module.exports = function (str) {
 
   var tokens = lex(str); // all tokens
   //console.log(tokens);
-  var table = {};
+  var table = {'@test': '#testval'};
 
   // cssRules like this:
   // [['#header', 'div','color'], red]
@@ -29,16 +29,37 @@ module.exports = function (str) {
   function matchProp() {
     
     // match key: val;
-    if (look(1)[1] === ';') next();
+    // 一觉醒来发现这个函数错了,val必须要读到`;`结束,并吃掉`;`才行
+    if (look(1)[1] === ';') next(); // 所以这句话是错的
+
     if (look(1)[0] === 'string' && look(2)[1] === ':') {
       // key: val
-      var key = next();
+      var key = next()[1];
       next(); // symbol: ':'
+      var val = [];
+      while(look(1)[1] !== ';') {
+        var _val = next()[1];
+        //val.push(next()[1]);
+        if (_val in table) {
+          val.push(table[_val]);
+        } else {
+          val.push(_val);
+        }
+      }
+      cssRules.push([state.concat(key), val.join(' ')]);
+      next(); // pass ;
+      /*
       var val = next();
       if (val[0] === 'string') {
         //console.log(state, state.concat(key[1]));
-        cssRules.push([state.concat(key[1]), val[1]]);
+        var _val = val[1];
+        if (_val in table) {
+          _val = table[_val];
+        }
+        cssRules.push([state.concat(key[1]), _val]);
       }
+      */
+
     } else if (look(1)[0] === 'string' && look(2)[1] === '{') {
       // block in prop
       matchRule();
