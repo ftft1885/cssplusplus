@@ -1,6 +1,40 @@
 title:css++
 date:2013/5/15
 
+state
+-----
+css问题太多了, 当我差不多修复一个bug时, 又跑出来一个, 还是那个多重子选择器
+
+    .box {
+      div > p {
+        color: red;
+      }
+      color: blue;
+    }
+
+这时候`color: blue`会变成`.box div > `的属性, 这是因为没有在push时计数,而在pop时只pop一个的原因, 即状态不能返回的bug
+
+解决方法也很简单, 新定义一个stateCount, 每push下就`++`, 最后`state.splice(state.length - stateCount);`即可
+
+带符号的选择器
+-------
+css++ 首先就是要可以解析自己.
+
+就这就好比医生首先不能伤害病人, 投资不能把本金丢了一样.
+
+css中有带运算符的选择器, 比如
+
+    .box1 > .box2 {}
+    .box1 + .box2 {}
+
+这些都是可以前后空格的, 也就是说可以按照原来的规则print就行了.
+
+我随便加了个这样的规则, parser直接报错,打开一看,原来我的css parser根本不支持多selector
+
+添加了一下多selector, 发现会多出来空的选择器.然后我竟然不知道如何判断一个hash为空...难道只能用 `JSON.stringify()` ?
+
+后来发现不是为空的问题, 而是.box 只有一个子选择器, 即`.box { h1 {color: red}}` 那.box就不要写了
+
 hover
 ----
 我对:hover这几个伪类完全搞错了,以为可以.box :hover

@@ -3,7 +3,7 @@ var lex = require('./lex.js');
 module.exports = function (str) {
 
   var tokens = lex(str); // all tokens
-  //console.log(tokens);
+  console.log(tokens);
   var table = {'@test': '#testval'};
 
   // cssRules like this:
@@ -20,21 +20,27 @@ module.exports = function (str) {
 */
   // walk();
 
-  while (tokens.length > 3) {
-    // walk all tokens
-    var type = guess();
-    switch (type) {
-      case 'rule': 
-        matchRule();
-        break;
-      case 'init':
-        matchInit();
-        break;
-      default: 
-        // may skip one line anyday
-        throw new Error('Parse ERROR: cannot match any type');
+  walk();
+  function walk() {
+
+    while (tokens.length > 3) {
+      // walk all tokens
+      var type = guess();
+      switch (type) {
+        case 'rule': 
+          matchRule();
+          break;
+        case 'init':
+          matchInit();
+          break;
+        default: 
+          // may skip one line anyday
+          show();
+          throw new Error('Parse ERROR: cannot match any type');
+      }
+      //matchRule();
     }
-    //matchRule();
+
   }
   //console.log(cssRules);
   return cssRules;
@@ -122,8 +128,9 @@ module.exports = function (str) {
       }
       */
 
-    } else if (look(1)[0] === 'string' && look(2)[1] === '{') {
-      // block in prop
+    } else {
+      // console.log(guess());
+      if (guess() === 'rule')
       matchRule();
     }
  
@@ -131,11 +138,23 @@ module.exports = function (str) {
 
   function matchRule() {
 
-    // match selector{prop}     
+    // match sel1 sel2 ... selN { ...prop.. }
+    var stateCount = 0;
+    while (look(1)[1] !== '{') {
+
+      // push multi selectors
+      var sel = next();
+      if (sel[0] === 'string' || sel[0] === 'symbol') {
+        state.push(sel[1]);
+        stateCount ++;
+      }
+    }
+    next(); // `{`
+    /*
     var selector = next();
     state.push(selector[1]);
     next(); // '{'
-
+    */
     // expect prop
     matchProp();
     // after maybe } or ;
@@ -147,10 +166,12 @@ module.exports = function (str) {
     }
     next(';'); // '}'
     //console.log(state);
-    state.pop();
+    // may pop multi selectors too
+    // state.pop();
+    state.splice(state.length - stateCount);
     
   }
-
+/*
   function walk() {
     while (tokens.length > 0) {
       var token = next();
@@ -184,7 +205,7 @@ module.exports = function (str) {
       }
     }
   }
-
+*/
   return tokens;
 
   function look(n, skip) {

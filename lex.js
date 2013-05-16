@@ -82,7 +82,7 @@ module.exports = function(str) {
 
      // return symbol
      // :, -  has different meaning
-     var symArr = [';', '{', '}', ':', '=', '+', '-', '*', '/'];
+     var symArr = [';', '{', '}', ':', '=', '+', '-', '*', '/', '>'];
      var _char = str[0];
      var index = symArr.indexOf(_char);
      if (!_char) console.log(str.slice(0,10));

@@ -1,7 +1,7 @@
 #header {
   color: #222;
   font: bold 20px "雅黑";
-  button {
+  button > div  {
     background: #ccc;
   }
   &:hover {
@@ -10,10 +10,14 @@
   background: #333;
 }
 
-#footer {
+#footer > div{
   font-size: 2em;
   width: @test;
   span {
     color: #999;
   }
+}
+
+.box + p{
+  font-weight: bold;
 }
