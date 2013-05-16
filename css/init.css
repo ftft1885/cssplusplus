@@ -1,0 +1,5 @@
+@color: #222;
+
+#header {
+  color: @color;
+}

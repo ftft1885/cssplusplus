@@ -20,11 +20,73 @@ module.exports = function (str) {
 */
   // walk();
 
-  while(tokens.length > 3) {
-    matchRule();
+  while (tokens.length > 3) {
+    // walk all tokens
+    var type = guess();
+    switch (type) {
+      case 'rule': 
+        matchRule();
+        break;
+      case 'init':
+        matchInit();
+        break;
+      default: 
+        // may skip one line anyday
+        throw new Error('Parse ERROR: cannot match any type');
+    }
+    //matchRule();
   }
   //console.log(cssRules);
   return cssRules;
+
+  function guess() {
+    var i = 1;
+    var token = look(i);
+    while (token[1] !== '{' && token[1] !== '=' && token[1] !== ':') {
+      i++;
+      token = look(i);
+    }
+    // get key token
+    var sym = token[1];
+    if (sym === '{') {
+      return 'rule';
+    } else if (state.length === 0) {
+      return 'init';
+    } else {
+      return 'error';
+    }
+    /*
+    if (1) {
+
+      //selector1 selector2 .. selectorN { ...  }
+      // even sel1 > sel2
+      return 'rule';
+
+    } else if (1) {
+
+      // state = [] && var str = str; || str = str; || str : str;
+      // there are all init
+      // remember `;` is must without `{}` because it will be compress
+      
+      
+    }
+    */
+  }
+
+  function matchInit() {
+
+    // state = [] && var str = str; || str = str; || str : str;
+    var key = next()[1];
+    if (key === 'var') {
+      key = next()[1];
+    }
+    next(); // `:` or `=`
+    var val = next()[1];
+    table[key] = val;
+    console.log(table);
+    next(); // `;`
+    
+  }
 
   function matchProp() {
     
@@ -37,7 +99,7 @@ module.exports = function (str) {
       var key = next()[1];
       next(); // symbol: ':'
       var val = [];
-      while(look(1)[1] !== ';') {
+      while (look(1)[1] !== ';') {
         var _val = next()[1];
         //val.push(next()[1]);
         if (_val in table) {
@@ -78,7 +140,7 @@ module.exports = function (str) {
     matchProp();
     // after maybe } or ;
     //var after = next(';');
-    while(look(';')[1] !== '}') {
+    while (look(1, ';')[1] !== '}') {
 
       // not end
       matchProp();
@@ -90,7 +152,7 @@ module.exports = function (str) {
   }
 
   function walk() {
-    while(tokens.length > 0) {
+    while (tokens.length > 0) {
       var token = next();
       if (token) {
 
@@ -125,17 +187,18 @@ module.exports = function (str) {
 
   return tokens;
 
-  function look(n, m) {
+  function look(n, skip) {
 
     // see form 1, won't change tokens
-    var max = m || 1;
-    var ignore = null;
+    var max = n || 1;
+    var ignore = skip;
+    /*
     if (typeof n === 'number') {
       max = n;
     } else if (typeof n === 'string') {
       ignore = n;
     }
-
+    */
     var index = 0;
     for (var i = 0, token; token = tokens[i]; i++) {
       if (token[0] !== 'blank' && token[1] !== ignore) {
