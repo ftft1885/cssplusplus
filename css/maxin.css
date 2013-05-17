@@ -3,10 +3,14 @@ rule(mycolor: red) {
   background: mycolor;
 }
 
-border(@border: 5px) {
-  border-radius: @border;
+border(@radius: 5px) {
+  border-radius: @radius;
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
+}
+
+div {
+  border(2px);
 }
 
 h1 {
@@ -14,5 +18,6 @@ h1 {
 }
 
 h2 {
+  border;
   rule(blue);
 }
