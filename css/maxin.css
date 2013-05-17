@@ -1,0 +1,18 @@
+rule(mycolor: red) {
+  color: mycolor;
+  background: mycolor;
+}
+
+border(@border: 5px) {
+  border-radius: @border;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+}
+
+h1 {
+  rule;
+}
+
+h2 {
+  rule(blue);
+}

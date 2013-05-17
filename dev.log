@@ -1,6 +1,99 @@
 title:css++
 date:2013/5/15
 
+maxin真实原理
+--------
+昨天没想出来好的方法,想了下还是应该是在词法分析前的预处理(预处理当然是前开头的!)
+
+第一步: 找出声明maxin语法(是否预处理先把注释去掉呢?)
+
+格式为`maxinname(key=value) {use key} `
+
+第二步: 找出使用maxin语句
+
+格式为` maxinname(value);`
+
+第三步: 把use key中的key替换为value
+
+第四部: 用use key替换使用maxin的语句
+
+
+
+maxin数据结构
+----------
+maxin中首先要有函数, 同时有一个变量的default值
+
+还是用刚才的rule这个maxin
+
+格式为
+
+    function rule(p) {
+      var color = p || red;
+      var output = {
+        color: color,
+        background: color   
+      };
+      return output;
+    }
+
+但真的是函数么? 既然说到像宏,是不是仅仅是简单的字符串替换呢?
+
+在词法的时候就可以专门找出maxin, 然后查找是否有宏替换, 取出rule中
+
+    color: @color;
+    bacnground: @color;
+
+直接使用替换, 也就是说在parser前就已经进行了
+
+['maxin', 'rule(blue)'] 换成['string', 'color'], ['symbol', ':'],  ['string', '@color'] ...
+
+
+
+混入(maxin)
+------
+后来发现大家都叫的混入(sass stylus less)都这么叫.
+
+less的混入我感觉混乱不堪,因为分不清混入和继承的关系.
+
+由于混入自身是不会带入css的.
+
+    rule(@color: red) {
+      color: @color;
+      background: @color;
+    }
+
+.rule已经不能放在table里了,要放在专门的maxin中, maxin里面都是函数,因为有变量么..
+
+使用的时候
+      
+    .box {
+      rule(blue);
+    }
+
+调用rule(blue)返回
+
+  {
+    color: blue;
+    background: blue;
+  }
+
+遍历之得到`[[.box, color], blue]`, `[[.box, background], blue]`还是ok的.
+
+兼容问题`rule();` `rule;` 是否都可以?
+
+
+函数
+-----
+这个是一个大头,而且不像其他小bug那样修修补补就行,
+
+css中本来就有函数`background: #00FF00 url(bgimage.gif) no-repeat fixed top;`
+
+还有`rgb()`等
+
+而less中也提供了函数.有了函数的扩展, css++才真的是css++.
+
+less中的混合在我看来就是函数,强大到变态
+
 state
 -----
 css问题太多了, 当我差不多修复一个bug时, 又跑出来一个, 还是那个多重子选择器
