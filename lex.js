@@ -8,10 +8,13 @@
  * 唯一的难点是如何处理顺序
  * 事实上根本不要担心顺序,因为完全不冲突
  */
+var predo = require('./predo.js');
 
 module.exports = function(str) {
 //  console.log(str);
 
+  str = predo(str);
+  console.log(str);
   return scan();
 
   function scan() {

@@ -6,5 +6,5 @@ var str = fs.readFileSync('./css/maxin.css')+'';
 
 var output = predo(str);
 
-//console.log(output);
+console.log(output);
 

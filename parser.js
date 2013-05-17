@@ -3,7 +3,7 @@ var lex = require('./lex.js');
 module.exports = function (str) {
 
   var tokens = lex(str); // all tokens
-  console.log(tokens);
+  //console.log(tokens);
   var table = {'@test': '#testval'};
 
   // cssRules like this:

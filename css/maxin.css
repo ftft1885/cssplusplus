@@ -5,11 +5,14 @@ rule(mycolor: red) {
 
 border(@radius: 5px) {
   border-radius: @radius;
+  /*
+     asdascdasa
+     */
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
 }
 
-div {
+div { //asdasdasscs
   border(2px);
 }
 
